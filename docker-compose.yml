@@ -1,0 +1,28 @@
+version: '3'
+services:
+  web-scraper-api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      - ollama
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+    ports:
+      - "11434:11434"
+    deploy:
+      resources:
+        limits:
+          memory: 5G  # Memory limit to leave 1GB for system
+    restart: unless-stopped
+
+volumes:
+  ollama_data:
